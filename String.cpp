@@ -134,7 +134,7 @@ public:
 istream& getline(istream& is, String& s){
     delete[] s.str;
     const size_t max = 1000;
-    char buffer[max];
+    char* buffer = new char[max];
     s.sz = 0;
     char ch;
     while (is.get(ch))
@@ -148,6 +148,7 @@ istream& getline(istream& is, String& s){
     {
         s.str[i] = buffer[i];
     }
+    delete [] buffer;
     s.str[s.sz+1] = '\0';
     return is;
 }
@@ -181,8 +182,9 @@ ostream& operator<<(ostream& os,const String& s){
     return os;
 }
 
-String::String(String&& s):str(s.str){
+String::String(String&& s):str(s.str),sz(s.sz){
     s.str = nullptr;
+    s.sz = 0;
 }
 
 String::String(const char* ptr):str(new char[sz+1]),sz(length(ptr))
